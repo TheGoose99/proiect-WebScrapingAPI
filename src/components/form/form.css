@@ -1,0 +1,154 @@
+form {
+  background-color: whitesmoke;
+  padding: 0px 60px;
+  border-radius: 5px;
+  margin: auto;
+  width: 100%;
+  border: 3px solid black;
+  box-shadow: 2px 20px #888888;
+}
+
+h1 {
+  color: rgb(77, 1, 77);
+  text-align: center;
+}
+
+.submit {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: rebeccapurple;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
+.generateCode {
+  width: 100%;
+  height: 50px;
+  padding: 10px;
+  border: none;
+  background-color: mediumslateblue;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+
+.center {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  padding: 10px;
+  margin: auto;
+  width: 100%;
+  left: 37%;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Raleway:400");
+
+* {
+  box-sizing: border-box;
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 90deg;
+  inherits: true;
+}
+
+@property --gradX {
+  syntax: "<percentage>";
+  initial-value: 50%;
+  inherits: true;
+}
+
+@property --gradY {
+  syntax: "<percentage>";
+  initial-value: 0%;
+  inherits: true;
+}
+
+:root {
+  --d: 2500ms;
+  --angle: 90deg;
+  --gradX: 100%;
+  --gradY: 50%;
+  --c1: rgba(168, 239, 255, 1);
+  --c2: rgba(168, 239, 255, 0.1);
+}
+
+.wrapper {
+  min-width: min(40rem, 100%);
+}
+
+.box {
+  margin: max(1rem, 3vw);
+  border: 0.35rem solid;
+  border-image: conic-gradient(
+      from var(--angle),
+      var(--c2),
+      var(--c1) 0.1turn,
+      var(--c1) 0.15turn,
+      var(--c2) 0.25turn
+    )
+    30;
+  animation: borderRotate var(--d) linear infinite forwards;
+  width: 20%;
+}
+
+.box:nth-child(2) {
+  border-image: radial-gradient(
+      ellipse at var(--gradX) var(--gradY),
+      var(--c1),
+      var(--c1) 10%,
+      var(--c2) 40%
+    )
+    30;
+  animation: borderRadial var(--d) linear infinite forwards;
+}
+
+@keyframes borderRotate {
+  100% {
+    --angle: 420deg;
+  }
+}
+
+@keyframes borderRadial {
+  20% {
+    --gradX: 100%;
+    --gradY: 50%;
+  }
+  40% {
+    --gradX: 100%;
+    --gradY: 100%;
+  }
+  60% {
+    --gradX: 50%;
+    --gradY: 100%;
+  }
+  80% {
+    --gradX: 0%;
+    --gradY: 50%;
+  }
+  100% {
+    --gradX: 50%;
+    --gradY: 0%;
+  }
+}
+
+h4 {
+  color: rgb(78, 154, 244);
+}
+
+.TextGame {
+  color: black;
+}

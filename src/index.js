@@ -1,12 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+// Routes
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+
+// Pages:
+import Formview from "./views/Formview";
+import NotFound from "./views/NotFound";
+import Lobby from "./views/Lobby";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route
+          exact
+          path="/"
+          element={<Navigate replace to="/enterGame" />}
+        ></Route>
+        <Route path="/enterGame" element={<Formview />} />
+        <Route path="/game/:gameId/lobby" element={<Lobby />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </BrowserRouter>
     <App />
   </React.StrictMode>
 );

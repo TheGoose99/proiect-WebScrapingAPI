@@ -1,0 +1,26 @@
+.Title {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1 {
+  color: white;
+}
+
+.outer {
+  position: absolute;
+  bottom: 85%;
+  transform: translate(0, -50%);
+  padding: 15px;
+  margin: auto;
+  width: 100%;
+  background: rgb(78, 154, 244);
+  background: linear-gradient(
+    90deg,
+    rgba(78, 154, 244, 1) 0%,
+    rgba(117, 117, 235, 1) 35%,
+    rgba(18, 35, 38, 1) 100%
+  );
+  border-bottom: 3px solid rgb(3, 109, 232);
+}
