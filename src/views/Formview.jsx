@@ -4,7 +4,7 @@ import Header from "../components/UI/header";
 const FormView = () => {
   return (
     <div>
-      <Header></Header>
+      <Header name="Black Jack Game"></Header>
       <div className="center">
         <div className="box">
           <Form></Form>;

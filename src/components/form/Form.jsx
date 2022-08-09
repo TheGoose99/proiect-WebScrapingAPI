@@ -1,8 +1,8 @@
-import FormInput from "./FormInput";
 import { useEffect, useState } from "react";
-import { w3cwebsocket as W3CWebSocket } from "websocket";
-import "./form.css";
 import { useNavigate } from "react-router-dom";
+import { w3cwebsocket as W3CWebSocket } from "websocket";
+import FormInput from "./FormInput";
+import "./form.css";
 
 const URL = "ws://localhost:9090";
 
@@ -75,8 +75,7 @@ const Form = () => {
       if (response.method === "joinGame") {
         if (response.canJoin) {
           console.log(`Did you join the game? ${response.canJoin}`);
-          let responseCanJoin = response.canJoin;
-          isJoined(responseCanJoin);
+          isJoined(response);
         }
       }
     };
@@ -135,13 +134,16 @@ const Form = () => {
       e.currentTarget.elements.game_code &&
       e.currentTarget.elements.game_code.value
     ) {
-      joinGame(e.currentTarget.elements.game_code.value);
+      joinGame();
     }
   };
 
   function isJoined(response) {
-    if (response) {
-      navigate(`/game/${gameId}/lobby`);
+    if (response.canJoin) {
+      let gameData = response.game;
+      navigate(`/game/${values.game_code}/lobby`, {
+        state: { gameData, clientId },
+      });
     }
   }
 
@@ -169,7 +171,7 @@ const Form = () => {
     const payLoad = {
       method: "join",
       clientId: clientId,
-      gameId: gameId,
+      gameId: values.game_code,
     };
     ws.send(JSON.stringify(payLoad));
   };

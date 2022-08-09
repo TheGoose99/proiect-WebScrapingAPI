@@ -1,5 +1,12 @@
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import LobbyLayout from "../components/lobby/Lobbylayout";
 const Lobby = () => {
-  return <h1>That's my lobby</h1>;
+  const location = useLocation();
+  const [yourId, setyourId] = useState(location.state.clientId);
+  const [sentGameData, setsentGameData] = useState(location.state.gameData);
+  const sentData = [yourId, sentGameData];
+  return <LobbyLayout {...sentData}></LobbyLayout>;
 };
 
 export default Lobby;

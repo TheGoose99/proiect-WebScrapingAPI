@@ -1,3 +1,4 @@
+const { response } = require("express");
 const http = require("http");
 const app = require("express")();
 app.get("/", (_, res) => res.sendFile(__dirname + "/index.html"));
@@ -13,6 +14,7 @@ httpServer.listen(9090, () => {
 // Hashmaps:
 const clients = {};
 const games = {};
+const i = 0;
 
 const wsServer = new websocketServer({
   httpServer: httpServer,
@@ -33,6 +35,7 @@ wsServer.on("request", (request) => {
     const result = JSON.parse(message.utf8Data);
     console.log(`\n Datele de intrare:`);
     console.log(result);
+    console.log("\n");
 
     if (result.method === "stepOne") {
       const clientId = result.clientId;
@@ -78,39 +81,66 @@ wsServer.on("request", (request) => {
 
     // User wants to join a game:
     if (result.method === "join") {
-      const clientId = result.clientId;
       const gameId = result.gameId;
       const game = games[gameId];
 
       // Max players reached.
-      if (typeof game.clients !== 'undefined' && game.clients.length >= 3) {
-        {
-          return;
+      if (typeof game.clients.length !== "undefined") {
+        if (game.clients.length >= 3) {
+          {
+            return;
+          }
         }
       }
 
       game.clients.push({
-        clientId: clientId,
+        ...clients[result.clientId],
       });
 
-      // Start the game:
-      if (game.clients.length === 3) {
-        updateGameState();
-      }
-
-      const payload = {
+      const payLoad = {
         method: "joinGame",
         game: game,
         canJoin: true,
       };
 
-      console.log(`Datele de iesire:`);
-      console.log(game);
-
       // Loop through all clients and tell them that people have joined:
       game.clients.forEach((c) => {
-        clients[c.clientId].connection.send(JSON.stringify(payload));
+        c.connection.send(JSON.stringify(payLoad, getCircularReplacer()));
       });
+    }
+
+    if (result.method === "changeVote") {
+      const gameId = result.gameId;
+      const clientId = result.clientId;
+
+      games[gameId].clients
+        .filter((x) => x.id === clientId)
+        .forEach((vote) => (vote.voteReady = !vote.voteReady));
+
+      const updatedData = games[gameId].clients;
+
+      const payLoad = {
+        method: "changeVote",
+        updatedData: updatedData,
+      };
+
+      const game = games[gameId];
+      console.log(games);
+      game.clients.forEach((c) => {
+        console.log(payLoad);
+        c.connection.send(JSON.stringify(payLoad, getCircularReplacer()));
+      });
+    }
+
+    if (result.method === "test") {
+      const clientId = result.clientId;
+      const payLoad = {
+        method: "test",
+        clientId: clientId
+      }
+
+      const con = clients[clientId].connection;
+      con.send(JSON.stringify(payLoad));
     }
 
     // A user plays:
@@ -153,13 +183,26 @@ function updateGameState() {
       game: game,
     };
 
-    game.clients.forEach((c) => {
-      clients[c.clientId].connection.send(JSON.stringify(payLoad));
+    game.clients.clientId.forEach((c) => {
+      c.connection.send(JSON.stringify(payLoad, getCircularReplacer()));
     });
   }
 
   // Fiecare 500 milisecunde, jocul se va actualiza:
   setTimeout(updateGameState, 500);
+}
+
+function getCircularReplacer() {
+  const seen = new WeakSet();
+  return (key, value) => {
+    if (typeof value === "object" && value !== null) {
+      if (seen.has(value)) {
+        return;
+      }
+      seen.add(value);
+    }
+    return value;
+  };
 }
 
 function S4() {

@@ -1,10 +1,10 @@
 import "./header.css";
 
-function Title() {
+function Title(props) {
   return (
     <div className="outer">
       <div className="Title">
-        <h1>Black Jack Game</h1>
+        <h1>{props.name}</h1>
       </div>
     </div>
   );
