@@ -132,29 +132,15 @@ wsServer.on("request", (request) => {
       });
     }
 
-    if (result.method === "test") {
-      const clientId = result.clientId;
-      const payLoad = {
-        method: "test",
-        clientId: clientId
-      }
-
-      const con = clients[clientId].connection;
-      con.send(JSON.stringify(payLoad));
-    }
-
     // A user plays:
     if (result.method === "play") {
       const gameId = result.gameId;
-      const ballId = result.ballId;
-      const color = result.color;
       let state = games[gameId].state;
 
       if (!state) {
         state = {};
       }
-
-      state[ballId] = color;
+      
       games[gameId].state = state;
     }
   });
